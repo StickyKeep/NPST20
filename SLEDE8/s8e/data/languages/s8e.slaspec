@@ -1,0 +1,121 @@
+define endian=little;
+define alignment=1;
+
+define pcodeop read_input;
+define pcodeop print;
+define pcodeop stop;
+
+define space register type=register_space size=1;
+define space ram type=ram_space size=2 default;
+define space stack_space type=ram_space size=2;
+
+define register offset=0 size=1
+[r0 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 r11 r12 r13 r14 r15 sr];
+
+@define FLAG "sr[0,1]"
+
+define register offset=0 size=2 [pc stack_reg];
+	
+define token instr(16)
+	opcode_low = (0, 3)
+	opcode_high = (4, 7)
+	opcode_hl = (8, 11)
+	opcode_hh = (12, 15)
+	rrl = (0, 3)
+	rrh = (4, 7)
+	rl = (8, 11)
+	rh = (12, 15)
+	wl = (0, 7)
+	wh = (8, 15)
+	addr = (4, 15)
+;
+
+attach variables [rl rh rrl rrh] 
+[r0 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 r11 r12 r13 r14 r15];
+
+:OG rl, rh is opcode_low=0x5 & opcode_high=0x0 & rl & rh {
+	rl = rl & rh;
+}
+
+:ELLER rl, rh is opcode_low=0x5 & opcode_high=0x1 & rl & rh {
+	rl = rl | rh;
+}
+
+:XELLER rl, rh is opcode_low=0x5 & opcode_high=0x2 & rl & rh {
+	rl = rl ^ rh;
+}
+
+:VSKIFT rl, rh is opcode_low=0x5 & opcode_high=0x3 & rl & rh {
+	rl = rl << rh;
+}
+
+:HSKIFT rl, rh is opcode_low=0x5 & opcode_high=0x4 & rl & rh {
+	rl = rl >> rh;
+}
+
+:PLUSS rl, rh is opcode_low=0x5 & opcode_high=0x5 & rl & rh {
+	rl = rl + rh;
+}
+
+:MINUS rl, rh is opcode_low=0x5 & opcode_high=0x6 & rl & rh {
+	rl = rl - rh;
+}
+
+:LIK rl, rh is opcode_low=0x7 & opcode_high=0x0 & rl & rh {
+	$(FLAG) = (rl == rh);
+}
+
+:ULIK rl, rh is opcode_low=0x7 & opcode_high=0x1 & rl & rh {
+	$(FLAG) = (rl != rh);
+}
+
+:ME rl, rh is opcode_low=0x7 & opcode_high=0x2 & rl & rh {
+	$(FLAG) = (rl < rh);
+}
+
+:MEL rl, rh is opcode_low=0x7 & opcode_high=0x3 & rl & rh {
+	$(FLAG) = (rl <= rh);
+}
+
+:SE rl, rh is opcode_low=0x7 & opcode_high=0x4 & rl & rh {
+	$(FLAG) = (rl > rh);
+}
+
+:SEL rl, rh is opcode_low=0x7 & opcode_high=0x5 & rl & rh {
+	$(FLAG) = (rl >= rh);
+}
+
+:NOPE is opcode_low=0xC & opcode_high=0x0 & opcode_hl=0x0 & opcode_hh=0x0 {
+	# Suppress Warning
+	r0 = r0;
+}
+
+:STOPP is opcode_low=0x0 & opcode_high=0x0 & opcode_hh=0x0 & opcode_hl=0x0 {
+	stop();
+}
+
+:SKRIV rl is opcode_low=0x6 & opcode_high=0x1 & rl & opcode_hh=0x0 {
+	print(rl);
+}
+
+:LES rl is opcode_low=0x6 & opcode_high=0x0 & rl & opcode_hh=0x0 {
+	read_input(rl);
+}
+
+:SETT rrh, rl is opcode_low=0x2 & opcode_hh=0x0 & rrh & rl {
+	rrh = rl;
+}
+
+:SETT rrh, wh is opcode_low=0x1 & rrh & wh {
+	rrh = wh;
+}
+
+:HOPP addr is opcode_low=0x8 & addr {
+	local jmp_addr:2 = addr + 7;
+	goto [jmp_addr];
+}
+
+:BHOPP addr is opcode_low=0x9 & addr {
+	local jmp_addr:2 = addr + 7;
+	goto [jmp_addr];
+}

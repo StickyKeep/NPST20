@@ -1,0 +1,13 @@
+<language_definitions>
+  <language processor="SLEDE8-E"
+			endian="little"
+			size="16"
+			variant="default"
+			version="0.1"
+			slafile="s8e.sla"
+			processorspec="s8e.pspec"
+			id="s8e:2:default">
+    <description>SLEDE8-Enhanced</description>
+    <compiler name="default" spec="s8e.cspec" id="default" />
+  </language>
+</language_definitions>

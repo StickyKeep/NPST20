@@ -1,0 +1,24 @@
+0x2E534C45444538 => Header
+16 0[X]     => Write rX
+06 0[X]     => Read rX
+55 [X][Y]   => rY = rY + rX
+65 [X][Y]   => rY = rY - rX
+[X]2 0[Y]   => Sets Register rX to Register rY
+[X]1 [Y]    => Sets Register rX to Value 0xY
+05 [X][Y]   => rY = rY & rX
+15 [X][Y]   => rY = rY | rX
+25 [X][Y]   => rY = rY ^ rX
+35 [X][Y]   => rY = rY << rX
+45 [X][Y]   => rY = rY >> rX
+07 [X][Y]   => Compare Y == X
+17 [X][Y]   => Compare Y != X
+27 [X][Y]   => Compare Y < X
+37 [X][Y]   => Compare Y <= X
+47 [X][Y]   => Compare Y > X
+57 [X][Y]   => Compare Y >= X
+0C 00       => No Operation
+00 00       => Stopp
+[INSTR-LOW]8 [INSTR-HIGH] => Jump to [INSTR-HIGH INSTR-LOW] from start of first instruction
+[INSTR-LOW]9 [INSTR-HIGH] => Jump to [INSTR-HIGH INSTR-LOW] from start of first instruction, conditional
+[ADDR-LOW]3 [ADDR-HIGH]   => Store address in r0, r1
+DATA                      => Arbitrary amount of bytes stored inline where they are declared

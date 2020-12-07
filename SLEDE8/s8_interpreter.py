@@ -34,7 +34,6 @@ class S8Interpreter:
 		self.ip = 7
 		self.r = [0 for i in range(16)]
 		self.input_index = 0
-		self.input_index = 0
 		self.running = False
 		self.flag = False
 			
@@ -72,23 +71,23 @@ class S8Interpreter:
 		# Bitwise Operations
 		elif opcode == "05":
 			r0 = self.decode_value(1, high=True)
-			r0 = self.decode_value(1, high=False)
+			r1 = self.decode_value(1, high=False)
 			self.bitwise_and(r0, r1)
 		elif opcode == "15":
 			r0 = self.decode_value(1, high=True)
-			r0 = self.decode_value(1, high=False)
+			r1 = self.decode_value(1, high=False)
 			self.bitwise_or(r0, r1)
 		elif opcode == "25":
 			r0 = self.decode_value(1, high=True)
-			r0 = self.decode_value(1, high=False)
+			r1 = self.decode_value(1, high=False)
 			self.bitwise_xor(r0, r1)
 		elif opcode == "35":
 			r0 = self.decode_value(1, high=True)
-			r0 = self.decode_value(1, high=False)
+			r1 = self.decode_value(1, high=False)
 			self.bitwise_shift_left(r0, r1)
-		elif opcode == "35":
+		elif opcode == "45":
 			r0 = self.decode_value(1, high=True)
-			r0 = self.decode_value(1, high=False)
+			r1 = self.decode_value(1, high=False)
 			self.bitwise_shift_right(r0, r1)
 		
 		# Misc
@@ -110,7 +109,7 @@ class S8Interpreter:
 		elif opcode == "27":
 			r0 = self.decode_value(1, high=True)
 			r1 = self.decode_value(1, high=False)
-			self.flag = selfcompare_less_than(r0, r1)
+			self.flag = self.compare_less_than(r0, r1)
 		elif opcode == "37":
 			r0 = self.decode_value(1, high=True)
 			r1 = self.decode_value(1, high=False)
