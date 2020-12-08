@@ -1,0 +1,16 @@
+LES r0
+LES r1
+SETT r2, 0x0
+SETT r3, 0x0
+SETT r4, 0x6
+SETT r5, 0x1
+loop:
+PLUSS r2, r0
+PLUSS r2, r1
+PLUSS r3, r5
+LIK r3, r4
+BHOPP end
+HOPP loop
+end:
+SKRIV r2
+STOPP
